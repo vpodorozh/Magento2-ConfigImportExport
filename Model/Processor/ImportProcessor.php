@@ -19,6 +19,8 @@ use Symfony\Component\Console\Input\InputInterface;
 class ImportProcessor extends AbstractProcessor implements ImportProcessorInterface
 {
     private const DELETE_CONFIG_FLAG = '!!DELETE';
+    private const SKIP_CONFIG_FLAG = '!!SKIP';
+    
     /**
      * @var WriterInterface
      */
@@ -107,6 +109,12 @@ class ImportProcessor extends AbstractProcessor implements ImportProcessorInterf
 
                         $this->getOutput()->writeln(sprintf('<comment>%s => %s</comment>', $configPath, 'DELETED'));
                         $valuesSet++;
+
+                        continue;
+                    }
+
+                    if ($scopeConfigValue['value'] === self::SKIP_CONFIG_FLAG) {
+                        $this->getOutput()->writeln(sprintf('<comment>%s => %s</comment>', $configPath, 'SKIPPED'));
 
                         continue;
                     }
